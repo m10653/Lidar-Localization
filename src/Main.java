@@ -1,10 +1,9 @@
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
 public class Main {
-	
+
 	public static void main(String[] args) {
 		JFrame testFrame = new JFrame();
 	    testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,11 +33,11 @@ public class Main {
 		angleRad = Math.toRadians(angle);
 		Shape shiftedRoom2 = room.traslate(distance*Math.sin(angleRad), distance*Math.cos(angleRad));
 		
+		display.addMap(room);
+		display.addOffsetMap(shiftedRoom1);
+		display.addOffsetMap(shiftedRoom2);
+
 		
-		display.AddLines(get2dLines(shiftedRoom1.getPoints()));
-		display.AddLines(get2dLines(shiftedRoom2.getPoints()));
-		display.AddLines(get2dLines(room.getPoints()));
-//		display.AddLines(get2dLines());
 		System.out.println("Input Shape : " + room);
 		System.out.println("Possable location mesh 1 (unbounded): " + shiftedRoom1);
 		System.out.println("Possable location mesh 2 (unbounded): " + shiftedRoom2);
@@ -51,21 +50,17 @@ public class Main {
 				Point t = Line.getLineIntersets(line1.getPoint1(), line1.getPoint2(), line2.getPoint1(), line2.getPoint2());
 				if(t != null && room.contains(t)){
 					outPoints.add(t);
-//				}
 				}else if( t != null){
 					outPoints.add(t);
 				}
 			}
 		}
-		display.addPoints(outPoints);
 		System.out.println("Location : " + outPoints);
+		for(Point p:outPoints) {
+			display.addInersect(p);
+		}
 		
 		testFrame.setVisible(true);
-//		Scanner scan = new Scanner(System.in);
-//		System.out.println("Input Geometry by point (Format: x, y ) Input start point to end ");
-//		Shape room = new Shape(getPointInput(scan));
-//		System.out.println("Contains 5,5"+room.contains(new Point(6,6)));
-//		System.out.println("intersect of 4,4/6,6 and 4,6/6,4( should be 5,5)"+Line.getLineIntersets(new Point(4,4),new Point(6,6),new Point(4,6),new Point(6,4)));
 	}
 
 	public static ArrayList<Point> getPointInput(Scanner scan){
@@ -86,22 +81,6 @@ public class Main {
 			points.add(point);
 		}
 		return points;
-	}
-	public static ArrayList<Line2D> get2dLines(ArrayList<Point> points){
-		ArrayList<Line2D> out = new ArrayList<Line2D>();
-		Point first = null;
-		Point last = null;
-		for(Point p: points){
-			if(last != null){
-				out.add(new Line2D.Double(800-(p.getX())*10, 800-p.getY()*10, 800-last.getX()*10,  800-last.getY()*10));
-				last = p;
-			}else{
-				last = p;
-				first = p;
-			}
-		}
-		out.add(new Line2D.Double(800-first.getX()*10, 800-first.getY()*10, 800-last.getX()*10,  800-last.getY()*10));
-		return out;
 	}
 	public static ArrayList<Line> getLines(ArrayList<Point> points){
 		ArrayList<Line> out = new ArrayList<Line>();
