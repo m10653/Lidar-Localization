@@ -11,42 +11,45 @@ public class Display extends JComponent {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static int DISPLAY_SCALE = 10;
-	private static int DISPLAY_OFFSET_Y = 50;
-	private static int DISPLAY_OFFSET_X = 50;
-	private static int DISPLAY_PONT_SIZE = 8;
+	private static int DISPLAY_SCALE = 4;
+	private static int DISPLAY_OFFSET_Y = 70;
+	private static int DISPLAY_OFFSET_X = 70;
+	private static int DISPLAY_PONT_SIZE = 4;
 	private ArrayList<Shape> offsetMaps = new ArrayList<Shape>();
 	private Shape map;
 	private ArrayList<Point> intersects = new ArrayList<Point>();
 
 	@Override
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 		Graphics2D g2D = (Graphics2D) g;
-
+//		g2D.setStroke(new BasicStroke(1));
 		g2D.setColor(Color.BLACK);
 		for (Shape shape : offsetMaps) {
 			renderShape(g2D, shape);
 		}
+//		g2D.setStroke(new BasicStroke(4));
 		g2D.setColor(Color.RED);
+
 		renderShape(g2D, map);
+//		g2D.setStroke(new BasicStroke(1));
 		for (Point p : intersects) {
 			g.setColor(Color.RED);
-			g.drawOval(DISPLAY_OFFSET_X+(int) (p.getX()*DISPLAY_SCALE)-DISPLAY_PONT_SIZE/2, DISPLAY_OFFSET_Y+((int) p.getY()*DISPLAY_SCALE)-DISPLAY_PONT_SIZE/2, DISPLAY_PONT_SIZE, DISPLAY_PONT_SIZE);
+			g.drawOval((int) ajustX(p.getX()) - DISPLAY_PONT_SIZE / 2, (int) ajustY(p.getY()) - DISPLAY_PONT_SIZE / 2, DISPLAY_PONT_SIZE, DISPLAY_PONT_SIZE);
 			g.setColor(Color.GREEN);
-			g.fillOval(DISPLAY_OFFSET_X+(int) (p.getX()*DISPLAY_SCALE)-DISPLAY_PONT_SIZE/2, DISPLAY_OFFSET_Y+((int) p.getY()*DISPLAY_SCALE)-DISPLAY_PONT_SIZE/2, DISPLAY_PONT_SIZE, DISPLAY_PONT_SIZE);
+			g.fillOval((int) ajustX(p.getX()) - DISPLAY_PONT_SIZE / 2, (int) ajustY(p.getY()) - DISPLAY_PONT_SIZE / 2, DISPLAY_PONT_SIZE, DISPLAY_PONT_SIZE);
 		}
 		super.paint(g);
 	}
 
-	public void addOffsetMap(Shape shape) {
+	public synchronized void addOffsetMap(Shape shape) {
 		offsetMaps.add(shape);
 	}
 
-	public void addMap(Shape shape) {
+	public synchronized void addMap(Shape shape) {
 		map = shape;
 	}
 
-	public void addInersect(Point p) {
+	public synchronized void addInersect(Point p) {
 		intersects.add(p);
 
 	}
@@ -59,15 +62,23 @@ public class Display extends JComponent {
 		Point last = null;
 		for (Point p : shape.vertices) {
 			if (last != null) {
-				g.draw(new Line2D.Double(DISPLAY_OFFSET_X+p.getX() * DISPLAY_SCALE, DISPLAY_OFFSET_Y+p.getY() * DISPLAY_SCALE, DISPLAY_OFFSET_X+last.getX() * DISPLAY_SCALE, DISPLAY_OFFSET_Y+last.getY() * DISPLAY_SCALE));
+				g.draw(new Line2D.Double(ajustX(p.getX()), ajustY(p.getY()), ajustX(last.getX()), ajustY(last.getY())));
 				last = p;
 			} else {
 				last = p;
 				first = p;
 			}
 		}
-		g.draw(new Line2D.Double(DISPLAY_OFFSET_X+first.getX() * DISPLAY_SCALE, DISPLAY_OFFSET_Y+first.getY() * DISPLAY_SCALE, DISPLAY_OFFSET_X+last.getX() * DISPLAY_SCALE, DISPLAY_OFFSET_Y+last.getY() * DISPLAY_SCALE));
+		g.draw(new Line2D.Double(ajustX(first.getX()), ajustY(first.getY()), ajustX(last.getX()), ajustY(last.getY())));
 
+	}
+
+	private double ajustY(double y) {
+		return DISPLAY_OFFSET_Y + (y * DISPLAY_SCALE);
+	}
+
+	private double ajustX(double x) {
+		return DISPLAY_OFFSET_X + (x * DISPLAY_SCALE);
 	}
 
 }
