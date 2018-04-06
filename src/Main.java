@@ -1,3 +1,4 @@
+import java.awt.MouseInfo;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,18 +24,25 @@ public class Main {
 		System.out.println("Input groscope angle (relative) (0-360): ");
 		angle = scan.nextDouble();
 		angleRad = Math.toRadians(angle);
-		Shape shiftedRoom1 = room.traslate(distance * Math.sin(angleRad), distance * Math.cos(angleRad));
+		
 
 		System.out.println("Input lidar Distance 2: ");
 		distance = scan.nextDouble();
 		System.out.println("Input groscope angle (relative) (0-360): ");
 		angle = scan.nextDouble();
 		angleRad = Math.toRadians(angle);
+		testFrame.setVisible(true);
+		for(;;) {
+		angleRad = Math.toRadians(MouseInfo.getPointerInfo().getLocation().getY());
+		Shape shiftedRoom1 = room.traslate(distance * Math.sin(angleRad), distance * Math.cos(angleRad));
+		angleRad += Math.toRadians(23);
 		Shape shiftedRoom2 = room.traslate(distance * Math.sin(angleRad), distance * Math.cos(angleRad));
 
 		display.addMap(room);
-		display.addOffsetMap(shiftedRoom1);
-		display.addOffsetMap(shiftedRoom2);
+//		display.addOffsetMap(shiftedRoom1);
+//		display.addOffsetMap(shiftedRoom2);
+		System.out.println(shiftedRoom1);
+		System.out.println(shiftedRoom2);
 
 		System.out.println("Input Shape : " + room);
 		System.out.println("Possable location mesh 1 (unbounded): " + shiftedRoom1);
@@ -48,6 +56,8 @@ public class Main {
 				Point t = Line.getLineIntersets(line1.getPoint1(), line1.getPoint2(), line2.getPoint1(), line2.getPoint2());
 				if (t != null && room.contains(t)) {
 					outPoints.add(t);
+				}else if(t != null) {
+					outPoints.add(t);
 				}
 			}
 		}
@@ -55,8 +65,10 @@ public class Main {
 		for (Point p : outPoints) {
 			display.addInersect(p);
 		}
-
-		testFrame.setVisible(true);
+		display.repaint();
+		}
+		
+		
 
 	}
 

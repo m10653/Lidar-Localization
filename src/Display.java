@@ -14,7 +14,7 @@ public class Display extends JComponent {
 	private static int DISPLAY_SCALE = 32;
 	private static int DISPLAY_OFFSET_Y = 70;
 	private static int DISPLAY_OFFSET_X = 70;
-	private static int DISPLAY_PONT_SIZE = 4;
+	private static int DISPLAY_PONT_SIZE = 2;
 	private ArrayList<Shape> offsetMaps = new ArrayList<Shape>();
 	private Shape map;
 	private ArrayList<Point> intersects = new ArrayList<Point>();
