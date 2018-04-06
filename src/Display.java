@@ -11,7 +11,7 @@ public class Display extends JComponent {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static int DISPLAY_SCALE = 4;
+	private static int DISPLAY_SCALE = 32;
 	private static int DISPLAY_OFFSET_Y = 70;
 	private static int DISPLAY_OFFSET_X = 70;
 	private static int DISPLAY_PONT_SIZE = 4;

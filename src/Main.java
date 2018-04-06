@@ -48,8 +48,6 @@ public class Main {
 				Point t = Line.getLineIntersets(line1.getPoint1(), line1.getPoint2(), line2.getPoint1(), line2.getPoint2());
 				if (t != null && room.contains(t)) {
 					outPoints.add(t);
-				} else if (t != null) {
-					outPoints.add(t);
 				}
 			}
 		}
